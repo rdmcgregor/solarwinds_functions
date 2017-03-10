@@ -4,16 +4,22 @@ require "json"
 require "net/http"
 
 # This is a custom function to add nodes to Solarwinds that aren't already there.
+# This function uses only SNMPV3 to connect to solarwinds.
+
 module Puppet::Parser::Functions
   newfunction(:add_node_to_solarwinds) do |args|
     config = {}    
 
-    config["username"]  = function_hiera(['solarwinds_functions::config::username'])
-    config["password"]  = function_hiera(['solarwinds_functions::config::password'])
-    config["queryurl"]  = function_hiera(['solarwinds_functions::config::queryurl'])
-    config["addurl"]    = function_hiera(['solarwinds_functions::config::addurl'])
-    config["community"] = function_hiera(['solarwinds_functions::config::community'])
-    config["pollers"]   = function_hiera(['solarwinds_functions::config::pollers'])
+    config["username"]  = call_function('hiera',['solarwinds_functions::config::username'])
+    config["password"]  = call_function('hiera',['solarwinds_functions::config::password'])
+    config["queryurl"]  = call_function('hiera',['solarwinds_functions::config::queryurl'])
+    config["addurl"]    = call_function('hiera',['solarwinds_functions::config::addurl'])
+    config["snmpv3username"] = call_function('hiera',['solarwinds_functions::config::snmpv3username'])
+    config["snmpv3privmethod"] = call_function('hiera',['solarwinds_functions::config::snmpv3privmethod'])
+    config["snmpv3privkey"] = call_function('hiera',['solarwinds_functions::config::snmpv3privkey'])
+    config["snmpv3authmethod"] = call_function('hiera',['solarwinds_functions::config::snmpv3authmethod'])
+    config["snmpv3authkey"] = call_function('hiera',['solarwinds_functions::config::snmpv3authkey'])
+    config["pollers"]   = call_function('hiera',['solarwinds_functions::config::pollers'])
     config["engineid"]  = config["pollers"].split(",").sample
     config["nodename"]  = lookupvar('fqdn')
     config["ipaddr"]    = lookupvar('ipaddress')
@@ -54,7 +60,7 @@ def addhost(config)
     "Caption"=> "#{config["nodename"]}", "DynamicIP" => "False", "EngineID" => "#{config["engineid"]}", 
     "Status" => 1, "UnManaged" => "False", "Allow64BitCounters" => "True", 
     "SysObjectID" => "", "MachineType" => "", "VendorIcon" => "", 
-    "ObjectSubType" => "SNMP", "SNMPVersion" => 2, "Community" => "#{config["community"]}",
+    "ObjectSubType" => "SNMP", "SNMPVersion" => 3, "SNMPV3Username" => "#{config["snmpv3username"]}", "SNMPV3Context" => "", "SNMPV3PrivKey" => "#{config["snmpv3privkey"]}", "SNMPV3PrivKeyIsPwd" => 1, "SNMPV3PrivMethod" => "#{config["snmpv3privmethod"]}", "SNMPV3AuthMethod" => "#{config["snmpv3authmethod"]}", "SNMPV3AuthKey" => "#{config["snmpv3authkey"]}", "SNMPV3AuthKeyIsPwd" => 1,
   }
 
   http = Net::HTTP.new(uri.host, uri.port)
