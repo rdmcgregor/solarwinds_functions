@@ -5,6 +5,9 @@ This is a Puppet custom function for adding nodes to Solarwinds automagically
 
 Every puppet run the function will reach out to your Solarwinds instance and ask if it is already being monitored.  If it finds out that it does not exist it will add itself.
 
+
+Thanks to powellnathanj for the SNMP v2 version https://github.com/powellnathanj/solarwinds_functions
+
 Installation
 ===========
 
