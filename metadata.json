@@ -1,0 +1,14 @@
+{
+  "name": "solarwinds_functions",
+  "version": "0.1.0",
+  "author": "Russell McGregor",
+  "summary": "Automatically add managed puppet node to Solarwinds",
+  "license": "Apache 2.0",
+  "source": "https://github.com/rdmcgregor/solarwinds_functions.git",
+  "project_page": "https://github.com/rdmcgregor/solarwinds_functions",
+  "issues_url": "https://github.com/rdmcgregor/solarwinds_functions/issues",
+
+  "dependencies": [
+    {"name": "puppetlabs/stdlib","version_requirement": ">= 3.2.0"}
+  ]
+}

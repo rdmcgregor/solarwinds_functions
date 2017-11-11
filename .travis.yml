@@ -1,0 +1,12 @@
+---
+sudo: false
+language: ruby
+services:
+  - docker
+cache: bundler
+before_install:
+  - bundle install
+  - bundle exec pdqtest setup
+script: "make"
+rvm:
+  - 2.3.5
